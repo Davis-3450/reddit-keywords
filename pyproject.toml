@@ -1,22 +1,37 @@
 [project]
-name = "uv-cli-template"
+name = "reddit-keywords"
 version = "0.1.0"
-description = "Add your description here"
+description = "A tool for extracting entries from a subreddit based on keywords."
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = ["typer>=0.16.1"]
+dependencies = [
+    "dotenv>=0.9.9",
+    "gradio>=5.49.1",
+    "praw>=7.8.1",
+    "typer>=0.16.1",
+]
 
 [project.scripts]
-uv-cli-template = "package.main:app"
+reddit-keywords = "app:main"
+
 
 [dependency-groups]
-dev = ["pytest", "ruff", "pyrefly", "pre-commit"]
+dev = ["pytest", "ruff", "pyrefly", "pre-commit", "mypy>=1.18.2"]
 
 
 [tool.pyrefly]
-project-includes = ["**/*"]
-project-excludes = ['**/*venv/**\*']
+# Which paths to type-check as part of the project. Use snake_case keys.
+project_includes = ["."]
+# Where to resolve imports from (project roots / source directories)
+search_path = ["."]
+# Exclude common virtualenv and cache directories (standard glob patterns)
+project_excludes = ["**/venv/**", "**/.venv/**", "**/__pycache__/**"]
 
 [tool.ruff]
 line-length = 88
 target-version = "py313"
+
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
