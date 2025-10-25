@@ -6,13 +6,12 @@ from praw.models.reddit.more import MoreComments
 from app.models import Comment as CommentModel
 from app.models import Post as PostModel
 from app.utils.exceptions import SubredditNotFound
-from app.utils.print import Printer
 
 
 class Scraper:
-    def __init__(self, client: Reddit, printer: Printer):
+    def __init__(self, client: Reddit):
+        """Initialize Scraper."""
         self.client = client
-        printer
 
     def explore_posts_by_keyword(
         self,
@@ -21,12 +20,18 @@ class Scraper:
         limit: int = 100,
         include_comments: bool = False,
     ):
-        if isinstance(subreddit, str) and not self._validate_existence(subreddit):
-            raise SubredditNotFound()
+        if isinstance(subreddit, str):
+            if not self._validate_existence(subreddit):
+                raise SubredditNotFound()
+            sub: Subreddit = self.client.subreddit(subreddit)
+        else:
+            sub = subreddit
 
-        sub: Subreddit = subreddit
+        query = (
+            " ".join(keywords) if isinstance(keywords, (list, tuple)) else str(keywords)
+        )
 
-        for post in sub.search(keywords, limit=limit):
+        for post in sub.search(query, limit=limit):
             if include_comments:
                 comments: list[CommentModel] = []
                 for comment in post.comments.list():
