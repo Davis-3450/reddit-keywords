@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
 
 
 class UiMode(str, Enum):
@@ -11,7 +10,7 @@ class UiMode(str, Enum):
 @dataclass
 class Comment:
     body: str
-    comments: Optional[list["Comment"]] = None
+    comments: list["Comment"] | None = None
 
 
 @dataclass
@@ -19,4 +18,4 @@ class Post:
     title: str
     url: str | None = None
     body: str | None = None
-    comments: Optional[list["Comment"]] = None
+    comments: list[Comment] | None = None
