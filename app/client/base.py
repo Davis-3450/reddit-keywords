@@ -1,20 +1,16 @@
-import os
-
-from dotenv import load_dotenv
 from praw import Reddit
 
 from app.client.scraper import Scraper
-from app.utils.print import printer as p
-
-load_dotenv()
+from app.config import RedditAccount
+from app.utils.print import p
 
 client = Reddit(
-    client_id=os.getenv("REDDIT_CLIENT_ID"),
-    client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
-    user_agent=os.getenv("REDDIT_USER_AGENT"),
-    username=os.getenv("REDDIT_USERNAME"),
-    password=os.getenv("REDDIT_PASSWORD"),
+    client_id=RedditAccount.client_id,
+    client_secret=RedditAccount.client_secret,
+    user_agent=RedditAccount.user_agent,
+    username=RedditAccount.username,
+    password=RedditAccount.password,
 )
 
-p.info(f"Reddit Client initialized with user {client.user.me()}")
-scraper = Scraper(client=client)
+p.info(f"Reddit Client initialized with user {str(client.user.me())}")
+scraper = Scraper(client=client)  # TODO move this
