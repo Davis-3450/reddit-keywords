@@ -1,8 +1,8 @@
 from typer import secho
 from typer.colors import BLUE, GREEN, MAGENTA, RED, YELLOW
 
+from app.config import Config
 from app.models import UiMode
-from app import app_mode
 
 
 class Printer:
@@ -12,9 +12,9 @@ class Printer:
     def _print(self, text: str, color):
         if not self.enable:
             return
-        if app_mode == UiMode.TYPER:
+        if Config.mode == UiMode.TYPER:
             secho(text, fg=color, bold=True)
-        elif app_mode == UiMode.GRADIO:
+        elif Config.mode == UiMode.GRADIO:
             print(text)
 
     def info(self, text: str):
@@ -39,4 +39,4 @@ class Printer:
         self._print(text, MAGENTA)
 
 
-printer = Printer()
+p = Printer()
