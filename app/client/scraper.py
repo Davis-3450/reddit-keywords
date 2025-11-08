@@ -23,7 +23,7 @@ class Scraper:
         keywords: list[str],
         limit: int = 1000,
         include_comments: bool = False,
-        max_length: int = 10000,
+        max_chars: int = -1,
     ) -> Generator[PostModel, None, None]:
         if isinstance(subreddit, str):
             if not self.validate_existence(subreddit):
@@ -32,7 +32,7 @@ class Scraper:
         else:
             sub = subreddit
 
-        total_length: int = 0
+        total_chars: int = 0
 
         query = (
             " ".join(keywords) if isinstance(keywords, (list, tuple)) else str(keywords)
@@ -51,12 +51,11 @@ class Scraper:
                         comments.append(built)
                 post_info.comments = comments
 
-            if total_length + len(post_info) > max_length:
-                p.warning(f"Total length of posts exceeded max length of {max_length}")
-                break
+            if max_chars > 0 and ((total_chars + post_info.chars()) > max_chars):
+                p.warning(f"Total length of posts exceeded max length of {max_chars}")
+                return
 
-            total_length += len(post_info)
-
+            total_chars += post_info.chars()
             p.info(f"Scraped post: {post_info.title} from r/{sub.display_name}")
             yield post_info
 

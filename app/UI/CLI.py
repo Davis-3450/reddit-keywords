@@ -1,5 +1,5 @@
-from dataclasses import asdict
-from pprint import pprint
+import json
+from pathlib import Path
 
 from typer import Typer
 
@@ -25,6 +25,10 @@ def cli(
     subreddit: str,
     #  keywords: str,
     include_comments: bool = True,
+    filter_comments: bool = True,
+    limit: int = 1000,
+    source: str = "keywords.txt",
+    max_chars: int = 10000000,
 ) -> None:
     """Scrape posts from a subreddit based on keywords.
 
@@ -49,7 +53,10 @@ def cli(
 
     for post in scraper.explore_posts_by_keyword(
         subreddit=subreddit,
-        keywords=["a"],
+        keywords=["ftm"],
         include_comments=True,
+        max_chars=max_chars,
     ):
-        pprint(asdict(post))
+        FILE = Path(f"{subreddit}.json")
+        with FILE.open("a") as f:
+            json.dump(post.out(), f)
