@@ -12,9 +12,9 @@ class Comment:
     body: str
     comments: list["Comment"] | None = None
 
-    def __len__(self) -> int:
+    def chars(self) -> int:
         return len(self.body) + (
-            sum(len(c) for c in self.comments) if self.comments else 0
+            sum(c.chars() for c in self.comments) if self.comments else 0
         )
 
 
@@ -25,9 +25,16 @@ class Post:
     body: str | None = None
     comments: list[Comment] | None = None
 
-    def __len__(self) -> int:
+    def chars(self) -> int:
         return (
             len(self.title)
             + (len(self.body) if self.body else 0)
-            + (sum(len(c) for c in self.comments) if self.comments else 0)
+            + (sum(c.chars() for c in self.comments) if self.comments else 0)
         )
+
+    def out(self) -> dict:
+        return {
+            "title": self.title,
+            "body": self.body,
+            "comments": [c.body for c in self.comments] if self.comments else None,
+        }
