@@ -26,6 +26,19 @@ def cli(
     #  keywords: str,
     include_comments: bool = True,
 ) -> None:
+    """Scrape posts from a subreddit based on keywords.
+
+    Args:
+        subreddit (str): The subreddit to scrape posts from.
+        include_comments (bool, optional): Whether to include comments in the posts. Defaults to True.
+        filter_comments (bool, optional): Whether to filter comments. Defaults to True.
+        limit (int, optional): The maximum number of posts to scrape. Defaults to 1000.
+        source (str, optional): The source file to read keywords from. Defaults to "keywords.txt".
+        max_length (int, optional): The maximum output lenght.
+
+    Raises:
+        SubredditNotFound: If the subreddit is not found.
+    """
     # src = Source(source)
     # keywords = src.keywords or []
     from app.client.base import scraper
